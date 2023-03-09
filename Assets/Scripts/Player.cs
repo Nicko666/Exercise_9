@@ -73,16 +73,20 @@ public class Player : MonoBehaviour
     {
         RaycastHit2D hitGround = Physics2D.Raycast(transform.position, Vector2.down, transform.localScale.y / 2 + 0.1f, LayerMask.GetMask("Default"));
 
-        isGrounded = true;        
+        if (hitGround)
+        {
+            isGrounded = true;
+            Debug.Log(hitGround.collider.gameObject.name);
+        }  
     }
 
     public void EnemyCheck()
     {
-        RaycastHit2D hitGround = Physics2D.CircleCast(transform.position, transform.localScale.y / 2, Vector3.down, 0.1f, LayerMask.GetMask("Enemy"));
+        RaycastHit2D hitGround = Physics2D.CircleCast(transform.position, transform.localScale.y / 2 - 0.1f, Vector3.down, 0.2f, LayerMask.GetMask("Enemy"));
 
-        isGrounded = true;
         if (hitGround)
         {
+            isGrounded = true;
             Destroy(hitGround.collider.gameObject);
             Jump(1);
         }
