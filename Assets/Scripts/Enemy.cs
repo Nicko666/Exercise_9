@@ -6,14 +6,20 @@ public abstract class Enemy : MonoBehaviour
 {
     public int power;
 
+    public float weaknessY;
+
+    private void Start()
+    {
+        weaknessY = transform.localScale.y * 0.4f;
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        GameObject go = collision.gameObject;
-
-        if (go.tag == "Player")
+        if (collision.gameObject.TryGetComponent<Player>(out Player player))
         {
-            go.GetComponent<Player>().TakeDamage(power);
-            go.GetComponent<Player>().Jump(1);
+            if((player.transform.position.y - weaknessY) < transform.position.y)
+            {
+                player.TakeDamage(power);
+            }
         }
 
     }

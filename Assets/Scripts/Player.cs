@@ -42,11 +42,25 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        GroundedCheck();
-        EnemyCheck();
         Move(controls.Player.Move.ReadValue<float>());
         // action with space continiously pressed
         Jump(controls.Player.Jump.ReadValue<float>());
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        GameObject go = collision.gameObject;
+
+        if (go.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+        else if (go.TryGetComponent(out Enemy enemy) & transform.position.y >= (go.transform.position.y + enemy.weaknessY))
+        {
+            isGrounded = true;
+            Destroy(go);
+            Jump(1);
+        }
     }
 
 
@@ -67,30 +81,6 @@ public class Player : MonoBehaviour
     private void Jump(InputAction.CallbackContext obj)
     {
         Jump(1);
-    }
-
-    public void GroundedCheck()
-    {
-        RaycastHit2D hitGround = Physics2D.Raycast(transform.position, Vector2.down, transform.localScale.y / 2 + 0.1f, LayerMask.GetMask("Default"));
-
-        if (hitGround)
-        {
-            isGrounded = true;
-            Debug.Log(hitGround.collider.gameObject.name);
-        }  
-    }
-
-    public void EnemyCheck()
-    {
-        RaycastHit2D hitGround = Physics2D.CircleCast(transform.position, transform.localScale.y / 2 - 0.1f, Vector3.down, 0.2f, LayerMask.GetMask("Enemy"));
-
-        if (hitGround)
-        {
-            isGrounded = true;
-            Destroy(hitGround.collider.gameObject);
-            Jump(1);
-        }
-
     }
 
     public void TakeDamage(int value)
