@@ -55,7 +55,7 @@ public class Player : MonoBehaviour
         {
             isGrounded = true;
         }
-        else if (go.TryGetComponent(out Enemy enemy) & transform.position.y >= (go.transform.position.y + enemy.weaknessY))
+        else if (go.TryGetComponent(out MovingEnemy movingEnemy) & transform.position.y >= (go.transform.position.y + movingEnemy.weaknessY))
         {
             isGrounded = true;
             Destroy(go);
